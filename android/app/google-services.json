@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "188700540579",
+    "project_id": "sittler-app",
+    "storage_bucket": "sittler-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188700540579:android:33c80070049740c326c916",
+        "android_client_info": {
+          "package_name": "com.example.sittler_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "188700540579-i42ii4fh3lb9kouqjvool08eu88efgic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sittler_app",
+            "certificate_hash": "7188ab69a152bf769470c308a19cfb695e369de5"
+          }
+        },
+        {
+          "client_id": "188700540579-hf58taqatd4jtaqn6j3hlks1l761lqa8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWnKGHoYlBM37jlBOQJxOvOrtJyYv49PA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "188700540579-hf58taqatd4jtaqn6j3hlks1l761lqa8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
