@@ -4,7 +4,7 @@ class StaffModel {
   String? email;
   String? address;
   String? contactNumber;
-  String? services;
+  String? gender;
   String? imageUrl = "";
   Map? position;
   double? distance;
@@ -15,7 +15,7 @@ class StaffModel {
       this.email,
       this.address,
       this.contactNumber,
-      this.services,
+      this.gender,
       this.imageUrl,
       this.position,
       this.distance});
@@ -28,7 +28,7 @@ class StaffModel {
       email: map['email'],
       address: map['address'],
       contactNumber: map['contactNumber'],
-      services: map['services'],
+      gender: map['gender'],
       imageUrl: map['imageUrl'],
       position: map['position'],
       distance: map['distance'],
@@ -43,7 +43,7 @@ class StaffModel {
       'email': email,
       'address': address,
       'contactNumber': contactNumber,
-      'services': services,
+      'gender': gender,
       'imageUrl': imageUrl,
       'position': position,
       'distance': distance,

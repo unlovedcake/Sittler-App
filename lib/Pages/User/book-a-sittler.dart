@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sittler_app/Controller-Provider/Booking-Provider/booking-provider.dart';
+import 'package:sittler_app/Controller-Provider/Theme-Controller/theme-controler-provider.dart';
 import 'package:sittler_app/Controller-Provider/User-Controller/user-signup-signin.dart';
 import 'package:sittler_app/Model/book-model.dart';
 import 'package:sittler_app/Model/staff-model.dart';
@@ -190,10 +191,14 @@ class _BookASittlerState extends State<BookASittler> {
                 Container(
                   height: 150,
                   width: double.infinity,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                          color: Colors.black54,
+                          color: Provider.of<ThemeManager>(context, listen: false)
+                                      .getDarkMode ==
+                                  true
+                              ? Colors.black.withOpacity(1)
+                              : Colors.white.withOpacity(1),
                           blurRadius: 15.0,
                           offset: Offset(0.0, 0.75))
                     ],

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:sittler_app/Controller-Provider/Theme-Controller/theme-controler-provider.dart';
 import 'package:sittler_app/Controller-Provider/User-Controller/user-signup-signin.dart';
 
 import 'package:sittler_app/Route-Navigator/route-navigator.dart';
@@ -39,7 +40,6 @@ class _UserDrawerState extends State<UserDrawer> {
               height: MediaQuery.of(context).size.height,
               width: 300.0,
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
@@ -47,7 +47,11 @@ class _UserDrawerState extends State<UserDrawer> {
                     bottomRight: Radius.circular(10)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    color:
+                        Provider.of<ThemeManager>(context, listen: false).getDarkMode ==
+                                true
+                            ? Colors.black.withOpacity(1)
+                            : Colors.white.withOpacity(1),
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: Offset(0, 3), // changes position of shadow
@@ -138,7 +142,9 @@ class _UserDrawerState extends State<UserDrawer> {
                       color: Colors.redAccent,
                       onPressed: () {},
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      SignUpSignInController.logout(context);
+                    },
                   ),
                   const Divider(
                     color: Colors.grey,

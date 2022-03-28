@@ -7,6 +7,7 @@ import 'package:provider/src/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sittler_app/Controller-Provider/Theme-Controller/theme-controler-provider.dart';
+import 'package:sittler_app/Model/staff-model.dart';
 import 'package:sittler_app/Route-Navigator/route-navigator.dart';
 import 'package:sittler_app/Widgets/elevated-button.dart';
 import 'package:sittler_app/Widgets/gridview.dart';
@@ -105,29 +106,9 @@ class _UserHomeState extends State<UserHome> {
                       RouteNavigator.gotoPage(context, BookAnAppointment());
                     }),
                     addVerticalSpace(10),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: Container(
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
                   ],
                 ),
               );
-              //   Container(
-              //   height: 400,
-              //   child: GridView(
-              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //           crossAxisCount: 3, mainAxisSpacing: 16, crossAxisSpacing: 16),
-              //       children: [
-              //         Image.network('https://picsum.photos/250?image=1'),
-              //         Image.network('https://picsum.photos/250?image=2'),
-              //         Image.network('https://picsum.photos/250?image=3'),
-              //         Image.network('https://picsum.photos/250?image=1'),
-              //         Image.network('https://picsum.photos/250?image=2'),
-              //         Image.network('https://picsum.photos/250?image=3'),
-              //       ]),
-              // );
             } else {
               return const Center(
                   child: CircularProgressIndicator(

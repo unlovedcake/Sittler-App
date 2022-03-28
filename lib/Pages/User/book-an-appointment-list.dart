@@ -7,11 +7,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/src/provider.dart';
 import 'package:sittler_app/Controller-Provider/User-Controller/user-signup-signin.dart';
+import 'package:sittler_app/Model/staff-model.dart';
 import 'package:sittler_app/Pages/User/book-a-sittler.dart';
 
 class BookAnAppointment extends StatefulWidget {
-  const BookAnAppointment({Key? key}) : super(key: key);
-
   @override
   _BookAnAppointmentState createState() => _BookAnAppointmentState();
 }
@@ -29,7 +28,7 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
   int max_index = 0;
   int max_value = 0;
 
-  Future getAlluser() async {
+  Future getAllUser() async {
     try {
       final res = await FirebaseFirestore.instance.collection("table-staff").get();
 
@@ -62,30 +61,9 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
           double? distance = distanceImMeter?.round().toDouble();
 
           listUsers[i]['distance'] = (distance! / 1000).round().toDouble();
-          double? dis = listUsers[i]['distance'];
 
-          // print("${listUsers[i]['position']['latitude'].toString()}" "Distance");
-          // print("${_currentUserPosition!.latitude}" "Sincere Distance");
-
-          setState(() {});
-        }
-      }
-
-      listUsers.sort((a, b) => a["distance"].compareTo(b["distance"]));
-    } catch (e) {}
-
-    //getRate();
-  }
-
-  Future _getAddressFromLatLng() async {
-    try {
-      _currentUserPosition =
-          await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-      if (listUsers.length != 0) {
-        for (int i = 0; i < listUsers.length; i++) {
-          double? storelat = listUsers[i]['position']['latitude'];
-          double? storelng = listUsers[i]['position']['longitude'];
+          _currentUserPosition =
+              await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
           List<Placemark> placemarks = await placemarkFromCoordinates(
               listUsers[i]['position']['latitude'],
@@ -95,39 +73,15 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
 
           _currentAddress = "${place.locality}, ${place.postalCode}, ${place.country}";
 
-          setState(() {
-            listUsers[i]['address'] = _currentAddress;
-          });
+          listUsers[i]['address'] = _currentAddress;
+
+          setState(() {});
         }
       }
 
-      print("${_currentAddress}" "Address");
+      listUsers.sort((a, b) => a["distance"].compareTo(b["distance"]));
     } catch (e) {
-      print("ERROR");
-      print(e);
-    }
-  }
-
-  Future getUserClientDetails() async {
-    var snapshots =
-        await FirebaseFirestore.instance.collection('table-user-service').get();
-    var snapshotDocuments = snapshots.docs;
-
-    for (var docs in snapshotDocuments) {
-      double? storelat = docs.data()['position']['latitude'];
-      double? storelng = docs.data()['position']['longitude'];
-
-      distanceImMeter = await Geolocator.distanceBetween(
-        _currentUserPosition!.latitude,
-        _currentUserPosition!.longitude,
-        storelat!,
-        storelng!,
-      );
-      double? distance = distanceImMeter?.round().toDouble();
-
-      docs.data()['distance'] = (distance! / 1000)..toStringAsFixed(1);
-
-      print(docs.data()['fullName']);
+      print("Error");
     }
   }
 
@@ -135,8 +89,8 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
   void initState() {
     super.initState();
 
-    getAlluser();
-    _getAddressFromLatLng();
+    getAllUser();
+
     getDis();
   }
 
@@ -165,8 +119,19 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
           if (listUsers.length == 0) {
             //print('project snapshot data is: ${projectSnap.data}');
             return Center(
-                child: CircularProgressIndicator(
-              color: Colors.orange,
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(
+                  color: Colors.orange,
+                ),
+                OutlinedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    child: Text("Click Refresh Page"))
+              ],
             ));
           } else {
             return ListView.builder(

@@ -39,7 +39,13 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false, //remove arrow back icon
         centerTitle: true,
-        title: const Text("Scrubs"),
+        title: Text(
+          "Sittler App",
+          style: _textTheme.headline4?.copyWith(
+              fontSize: 20,
+              color: isDark ? Colors.white : Colors.black,
+              fontWeight: FontWeight.bold),
+        ),
         actions: [
           Switch(
               value: isDark,
@@ -60,27 +66,12 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
-                  "images/logo.png",
-                  width: 200,
+                  "images/sittler-logo.jpg",
+                  width: MediaQuery.of(context).size.width,
                   height: 200,
+                  fit: BoxFit.fill,
                 ),
-                addVerticalSpace(20),
-                Text(
-                  "Welcome to Scrubs",
-                  style: _textTheme.headline4?.copyWith(
-                      fontSize: 20,
-                      color: isDark ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-                // addVerticalSpace(10),
-                // Text(
-                //   "bostonsoftware@gmail.com",
-                //   style: _textTheme.subtitle1,
-                // ),
-                addVerticalSpace(10),
-                const Text(
-                  "Improving Lives Togethere",
-                ),
+
                 addVerticalSpace(50),
 
                 ElevatedButtonStyle.elevatedButton("Log In", onPressed: () {

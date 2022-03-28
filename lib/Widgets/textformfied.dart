@@ -13,16 +13,6 @@ class TextFormFields {
       padding: const EdgeInsets.only(left: 12.0, right: 12.0),
       child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.only(left: 10.0),
-            alignment: Alignment.topLeft,
-            child: Text(
-              label,
-              style: TextStyle(
-                  fontSize: 16.0, color: Colors.blueGrey, fontWeight: FontWeight.w500),
-              textAlign: TextAlign.left,
-            ),
-          ),
           SizedBox(
             height: 4.0,
           ),
@@ -46,6 +36,12 @@ class TextFormFields {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                     hintText: hint,
+                    label: Text(
+                      hint,
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

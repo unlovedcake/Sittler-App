@@ -41,7 +41,8 @@ class _UserClientLoginPageState extends State<UserClientLoginPage> {
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage("images/logo.png"), fit: BoxFit.cover),
+                            image: AssetImage("images/sittler-logo.jpg"),
+                            fit: BoxFit.cover),
                         // boxShadow: <BoxShadow>[
                         //   BoxShadow(
                         //       color: Colors.black54,

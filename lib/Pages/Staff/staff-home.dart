@@ -75,90 +75,23 @@ class _StaffHomeState extends State<StaffHome> {
               .collection("table-staff")
               .where('email', isEqualTo: user!.email)
               .snapshots(),
-          //stream: context.watch<SignUpSignInController>().getUserInfo(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot?> snapshot) {
-            final currentUser = snapshot.data;
+            final currentUser = snapshot.data?.docs;
 
             if (snapshot.hasData) {
-              return SingleChildScrollView(
+              return Center(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AspectRatio(
-                      aspectRatio: 3 / 2,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                                "https://media.istockphoto.com/photos/team-of-doctors-and-nurses-in-hospital-picture-id1307543618?b=1&k=20&m=1307543618&s=170667a&w=0&h=hXpYmNYXnhdD36C-8taPQvdpM9Oj-woEdge8nvPrsZY="),
-                          ),
-                        ),
-                      ),
-                    ),
                     addVerticalSpace(10),
-                    AspectRatio(
-                      aspectRatio: 3 / 2,
-                      child: GridView(
-                          padding: EdgeInsets.all(18),
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16),
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                print("About");
-                              },
-                              child: Grid.gridView("About Us", "images/doctor.png"),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print("Services");
-                              },
-                              child: Grid.gridView("Services", "images/healthcare.png"),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print("Apointment");
-                              },
-                              child:
-                                  Grid.gridView("Appointment", "images/appointment.png"),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print("Apointment");
-                              },
-                              child: Grid.gridView("Health Blog", "images/blog.png"),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print("Apointment");
-                              },
-                              child: Grid.gridView("Gallery", "images/gallery.png"),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                print("Apointment");
-                              },
-                              child: Grid.gridView("Contact Us", "images/contact.png"),
-                            ),
-                            addVerticalSpace(20),
-                          ]),
+                    Text(
+                      'Hi ' + '${currentUser![0]['fullName']}',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-
-                    addVerticalSpace(20),
-                    ElevatedButtonStyle.elevatedButton("Book An Appointment",
-                        onPressed: () {
-                      RouteNavigator.gotoPage(context, BookAnAppointment());
+                    addVerticalSpace(50),
+                    ElevatedButtonStyle.elevatedButton("List of Sittlers", onPressed: () {
+                      // RouteNavigator.gotoPage(context, BookAnAppointment());
                     }),
-                    addVerticalSpace(10),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: Container(
-                    //     color: Colors.white,
-                    //   ),
-                    // ),
                   ],
                 ),
               );

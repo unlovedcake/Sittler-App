@@ -23,7 +23,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
   final TextEditingController _contactText = TextEditingController();
   final TextEditingController _passwordText = TextEditingController();
   final TextEditingController _confirmPasswordText = TextEditingController();
-  final TextEditingController _servicesText = TextEditingController();
+  final TextEditingController _gender = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   bool _isHidden = true;
@@ -32,7 +32,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Sign Up"),
+          title: const Text("Sign Up As Sittler"),
         ),
         body: SingleChildScrollView(
           reverse: true,
@@ -91,7 +91,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SelectFormField(
-                    controller: _servicesText,
+                    controller: _gender,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return ("Enter you expertise");
@@ -99,8 +99,8 @@ class _StaffSignUpState extends State<StaffSignUp> {
                     },
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                      hintText: 'Service',
-                      labelText: 'Service Type',
+                      hintText: 'Gender',
+                      labelText: 'Gender',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -109,7 +109,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                     //initialValue: "One",
                     // icon: Icon(Icons.format_shapes),
 
-                    items: ServicesTypesOfDoctor.items,
+                    items: ServicesTypesOfDoctor.gender,
                     onChanged: (val) {
                       print(val);
                     },
@@ -170,7 +170,7 @@ class _StaffSignUpState extends State<StaffSignUp> {
                     user.email = _emailText.text;
                     user.address = _addressText.text;
                     user.contactNumber = _contactText.text;
-                    user.services = _servicesText.text;
+                    user.gender = _gender.text;
 
                     context
                         .read<SignUpSignInControllerStaff>()
