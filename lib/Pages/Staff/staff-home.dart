@@ -88,10 +88,10 @@ class _StaffHomeState extends State<StaffHome> {
                       'Hi ' + '${currentUser![0]['fullName']}',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-                    addVerticalSpace(50),
-                    ElevatedButtonStyle.elevatedButton("List of Sittlers", onPressed: () {
-                      // RouteNavigator.gotoPage(context, BookAnAppointment());
-                    }),
+                    // addVerticalSpace(50),
+                    // ElevatedButtonStyle.elevatedButton("List of Sittlers", onPressed: () {
+                    //   RouteNavigator.gotoPage(context, BookAnAppointment());
+                    // }),
                   ],
                 ),
               );

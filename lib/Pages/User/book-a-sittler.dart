@@ -1,8 +1,14 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +24,9 @@ import 'package:sittler_app/Widgets/textformfield-date.dart';
 import 'package:flutter_clean_calendar/clean_calendar_event.dart';
 import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
+
+import '../../local-notification-service.dart';
 
 class BookASittler extends StatefulWidget {
   @override
@@ -25,6 +34,9 @@ class BookASittler extends StatefulWidget {
 }
 
 class _BookASittlerState extends State<BookASittler> {
+  late AndroidNotificationChannel channel;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
@@ -144,7 +156,8 @@ class _BookASittlerState extends State<BookASittler> {
   @override
   void initState() {
     super.initState();
-
+    print("OKEKESSS");
+    print(user!.uid);
     dis();
   }
 
@@ -161,6 +174,33 @@ class _BookASittlerState extends State<BookASittler> {
       });
     }
     print(events.length);
+  }
+
+  void sendPushMessage(String token, String title, String body) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAK-9tvqM:APA91bFSuuKsJVoTuNC19D_Tg1QkmW2Cfbfop879_daYGyvQYOa3zWBP2qcQwRfUPf5UVsJ01-xc6ZTfnz5cBjrkRQRRUPRshiflERqjCdU5byGIoHma8XrVuO2HPEE4FHCWUyTW5D9X',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'notification': <String, dynamic>{'body': body, 'title': title},
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'id': '1',
+              'status': 'done'
+            },
+            "to": token,
+          },
+        ),
+      );
+    } catch (e) {
+      print("error push notification");
+    }
   }
 
   @override
@@ -215,22 +255,19 @@ class _BookASittlerState extends State<BookASittler> {
                                 margin: EdgeInsets.all(8),
                                 width: 100,
                                 height: 100,
-                                child: Hero(
-                                  tag: currentUser![0]['uid'],
-                                  child: CachedNetworkImage(
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                    imageUrl: "${currentUser[0]['imageUrl']}",
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            CircularProgressIndicator(
-                                                value: downloadProgress.progress),
-                                    errorWidget: (context, url, error) => const Icon(
-                                      Icons.error,
-                                      size: 100,
-                                      color: Colors.red,
-                                    ),
+                                child: CachedNetworkImage(
+                                  width: 50,
+                                  height: 50,
+                                  fit: BoxFit.cover,
+                                  imageUrl: "${currentUser![0]['imageUrl']}",
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.error,
+                                    size: 100,
+                                    color: Colors.red,
                                   ),
                                 ),
                               ),
@@ -388,6 +425,7 @@ class _BookASittlerState extends State<BookASittler> {
                                         bookModel.appointmentStatus = "Pending";
                                         bookModel.userModel = {
                                           "uid": loggedInUser.uid,
+                                          "token": loggedInUser.token,
                                           "fullName": loggedInUser.fullName,
                                           "contactNumber": loggedInUser.contactNumber,
                                           "email": loggedInUser.email,
@@ -591,9 +629,24 @@ class _BookASittlerState extends State<BookASittler> {
                                           }
 
                                           if (canBook) {
+                                            // DocumentSnapshot snap =
+                                            //     await FirebaseFirestore.instance
+                                            //         .collection("table-staff")
+                                            //         .doc("0m5QQznVQ0VsmfJ2hhVhZnFbGx33")
+                                            //         .get();
+                                            //
+                                            // String token = snap['token'];
+
+                                            sendPushMessage(
+                                                currentUser[0]['token'],
+                                                "${loggedInUser.fullName}",
+                                                "is booking to you.");
                                             context
                                                 .read<BookingProvider>()
                                                 .bookingAdd(bookModel);
+                                            print("OKEKEKE");
+                                            //print(token);
+                                            print(currentUser[0]['token']);
                                           }
 
                                           //Navigator.pushNamed(context, '/client-home-page');

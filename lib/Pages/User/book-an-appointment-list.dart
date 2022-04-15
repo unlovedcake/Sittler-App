@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/src/provider.dart';
 import 'package:sittler_app/Controller-Provider/User-Controller/user-signup-signin.dart';
 import 'package:sittler_app/Model/staff-model.dart';
+import 'package:sittler_app/Pages/Home-Screen/demo_page.dart';
 import 'package:sittler_app/Pages/User/book-a-sittler.dart';
+import 'package:http/http.dart' as http;
 
 class BookAnAppointment extends StatefulWidget {
   @override
@@ -47,7 +51,7 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
       _currentUserPosition =
           await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-      if (listUsers.length != 0) {
+      if (listUsers.isNotEmpty) {
         for (int i = 0; i < listUsers.length; i++) {
           double? storelat = listUsers[i]['position']['latitude'];
           double? storelng = listUsers[i]['position']['longitude'];
@@ -140,20 +144,17 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
                 return Card(
                   margin: EdgeInsets.all(12),
                   child: ListTile(
-                    leading: Hero(
-                      tag: listUsers[index]['uid'],
-                      child: CachedNetworkImage(
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                        imageUrl: listUsers[index]['imageUrl'],
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            CircularProgressIndicator(value: downloadProgress.progress),
-                        errorWidget: (context, url, error) => Icon(
-                          Icons.error,
-                          size: 20,
-                          color: Colors.red,
-                        ),
+                    leading: CachedNetworkImage(
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      imageUrl: listUsers[index]['imageUrl'],
+                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                          CircularProgressIndicator(value: downloadProgress.progress),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error,
+                        size: 20,
+                        color: Colors.red,
                       ),
                     ),
                     //title: Text(listUsers[index]['fullName']),
@@ -212,6 +213,8 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
                       context
                           .read<SignUpSignInController>()
                           .setUserServiceEmail(listUsers[index]['email']);
+
+                      print(listUsers[index]['email']);
                     },
                   ),
                 );

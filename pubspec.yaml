@@ -56,6 +56,11 @@ dependencies:
   google_maps_flutter: ^2.1.2
   geoflutterfire: ^3.0.1
 
+  firebase_messaging: ^11.2.6
+  flutter_local_notifications: ^9.2.0
+  rxdart: ^0.27.3
+  http:
+
 
 dev_dependencies:
   flutter_test:

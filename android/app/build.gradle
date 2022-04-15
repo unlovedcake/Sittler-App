@@ -58,6 +58,11 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    packagingOptions {
+        // pickFirst "META-INF/DEPENDENCIES"
+        exclude "META-INF/DEPENDENCIES"
+    }
 }
 
 flutter {

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -54,8 +55,11 @@ class SignUpSignInControllerStaff with ChangeNotifier {
       await user!.reload();
       user = _auth.currentUser;
 
+      String? token = await FirebaseMessaging.instance.getToken();
+
       if (user != null) {
         staffModel!.uid = user!.uid;
+        staffModel.token = token;
         staffModel.imageUrl =
             "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png";
         staffModel.position = {

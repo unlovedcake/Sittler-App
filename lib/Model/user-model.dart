@@ -6,6 +6,7 @@ class UserModel {
   String? contactNumber;
   String? age;
   String? gender;
+  String? token;
   String? imageUrl = "";
 
   UserModel(
@@ -16,6 +17,7 @@ class UserModel {
       this.contactNumber,
       this.age,
       this.gender,
+      this.token,
       this.imageUrl});
 
   // receiving data from server
@@ -28,6 +30,7 @@ class UserModel {
       contactNumber: map['contactNumber'],
       age: map['age'],
       gender: map['gender'],
+      token: map['token'],
       imageUrl: map['imageUrl'],
     );
   }
@@ -42,6 +45,7 @@ class UserModel {
       'contactNumber': contactNumber,
       'age': age,
       'gender': gender,
+      'token': token,
       'imageUrl': imageUrl,
     };
   }
