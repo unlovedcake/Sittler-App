@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cherry_toast/resources/arrays.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:sittler_app/Model/staff-model.dart';
 import 'package:sittler_app/Pages/Home-Screen/demo_page.dart';
 import 'package:sittler_app/Pages/User/book-a-sittler.dart';
 import 'package:http/http.dart' as http;
+import 'package:cherry_toast/cherry_toast.dart';
 
 class BookAnAppointment extends StatefulWidget {
   @override
@@ -132,6 +134,17 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
                 ),
                 OutlinedButton(
                     onPressed: () {
+                      CherryToast.warning(
+                        title: '',
+                        displayTitle: false,
+                        //autoDismiss: true,
+                        description: 'Have A Nice Day !!!',
+                        animationType: ANIMATION_TYPE.fromTop,
+                        actionStyle: TextStyle(color: Colors.green),
+                        animationDuration: Duration(milliseconds: 1000),
+                        action: 'OK',
+                        actionHandler: () {},
+                      ).show(context);
                       setState(() {});
                     },
                     child: Text("Click Refresh Page"))

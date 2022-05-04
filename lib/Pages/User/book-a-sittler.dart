@@ -26,8 +26,6 @@ import 'package:flutter_clean_calendar/flutter_clean_calendar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
-import '../../local-notification-service.dart';
-
 class BookASittler extends StatefulWidget {
   @override
   _BookASittlerState createState() => _BookASittlerState();
@@ -434,6 +432,7 @@ class _BookASittlerState extends State<BookASittler> {
                                         };
                                         bookModel.userStaff = {
                                           "uid": currentUser[0]['uid'],
+                                          "token": currentUser[0]['token'],
                                           "fullName": currentUser[0]['fullName'],
                                           "email": currentUser[0]['email'],
                                           "imageUrl": currentUser[0]['imageUrl'],

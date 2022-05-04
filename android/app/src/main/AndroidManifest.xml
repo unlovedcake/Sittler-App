@@ -20,7 +20,7 @@
 
        <meta-data
            android:name="com.google.firebase.messaging.default_notification_icon"
-           android:resource="@drawable/ic_launcher" />
+           android:resource="@drawable/blog" />
        <meta-data
            android:name="com.google.firebase.messaging.default_notification_color"
            android:resource="@color/colorPrimary" />
@@ -65,7 +65,8 @@
            android:name="com.google.firebase.messaging.default_notification_channel_id"
            android:value="mychanel"
            />
-
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyBGsnZi4m_27F0vbiGFRRSRWvTtzFdsZss"/>
 
     </application>
 </manifest>

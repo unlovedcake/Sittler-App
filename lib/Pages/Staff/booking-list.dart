@@ -5,7 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sittler_app/Model/book-model.dart';
 import 'package:sittler_app/Model/staff-model.dart';
+import 'package:sittler_app/Route-Navigator/route-navigator.dart';
+
+import 'chat-to-parent.dart';
 
 class BookingList extends StatefulWidget {
   const BookingList({Key? key}) : super(key: key);
@@ -131,6 +135,11 @@ class _BookingListState extends State<BookingList> {
                                           minWidth: MediaQuery.of(context).size.width,
                                           onPressed: () async {
                                             Navigator.of(context).pop();
+                                            RouteNavigator.gotoPage(
+                                                context,
+                                                ChatToParent(
+                                                    parentInfo: BookModel.fromMap(
+                                                        userParent.data())));
                                           },
                                           child: const Text(
                                             "Send Message",
@@ -158,7 +167,6 @@ class _BookingListState extends State<BookingList> {
                                                 "${loggedInUser.fullName}",
                                                 "accept your booking..");
 
-                                            print(userParent.get('userModel.token'));
                                             print("Accept");
                                           },
                                           child: const Text(

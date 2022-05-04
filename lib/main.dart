@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,43 +10,31 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:sittler_app/Controller-Provider/Booking-Provider/booking-provider.dart';
+import 'package:sittler_app/Pages/Staff/booking-list.dart';
 
 import 'Controller-Provider/Staff-Controller/signin-signup-controller-staff.dart';
 import 'Controller-Provider/Theme-Controller/theme-controler-provider.dart';
 
 import 'Controller-Provider/User-Controller/user-signup-signin.dart';
-import 'Pages/Home-Screen/demo_page.dart';
-import 'Pages/Home-Screen/home.dart';
 import 'Pages/Onboarding-Screen/onboarding.dart';
 import 'Pages/Staff/staff-home.dart';
+import 'Pages/User/my-booking-list.dart';
 import 'Pages/User/user-home.dart';
-import 'Pages/User/user-signin.dart';
-import 'Pages/User/user-signup.dart';
+import 'Route-Navigator/route-navigator.dart';
 import 'Theme/Theme-Constant/theme-constant.dart';
+import 'package:http/http.dart' as http;
 
-import 'Widgets/elevated-button.dart';
-import 'Widgets/sizebox.dart';
-import 'local-notification-service.dart';
+// Initialize our global NavigatorKey
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   /// On click listner
   await Firebase.initializeApp();
-
-  // if (message.data.containsKey('data')) {
-  //   // Handle data message
-  //   final data = message.data['data'];
-  // }
-  //
-  // if (message.data.containsKey('notification')) {
-  //   // Handle notification message
-  //   final notification = message.data['notification'];
-  // }
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  LocalNotificationService.initialize();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -71,7 +62,10 @@ class _MyAppState extends State<MyApp> {
   var userLoggedIn;
 
   late AndroidNotificationChannel channel;
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -112,7 +106,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    tapNotificationBar();
     super.initState();
+
     _determinePosition();
 
     requestPermission();
@@ -155,10 +151,39 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  tapNotificationBar() {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print("Navigate To Home Page");
+      print(message.notification!.body);
+      if (message.data.isNotEmpty) {
+        // navigatorKey.currentState
+        //     ?.push(MaterialPageRoute(builder: (_) => const MyBookingList()));
+        await navigatorKey.currentState!.pushNamed('/user-mybookinglist');
+        print("Navigate To My Booking List");
+      } else {
+        print("Navigate To Home Page");
+      }
+    });
+  }
+
   void listenFCM() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
+
+      final ByteArrayAndroidBitmap largeIcon = ByteArrayAndroidBitmap(
+          await _getByteArrayFromUrl('https://via.placeholder.com/48x48'));
+      final ByteArrayAndroidBitmap bigPicture = ByteArrayAndroidBitmap(
+          await _getByteArrayFromUrl('https://via.placeholder.com/400x800'));
+
+      final BigPictureStyleInformation bigPictureStyleInformation =
+          BigPictureStyleInformation(bigPicture,
+              largeIcon: largeIcon,
+              contentTitle: notification?.title,
+              htmlFormatContentTitle: true,
+              summaryText: notification?.body,
+              htmlFormatSummaryText: true);
+
       if (notification != null && android != null && !kIsWeb) {
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
@@ -170,7 +195,10 @@ class _MyAppState extends State<MyApp> {
               channel.name,
               // TODO add a proper drawable resource to android, for now using
               //      one that already exists in example app.
-              icon: 'launch_background',
+              //styleInformation: bigPictureStyleInformation,  // it will display the url image
+              icon: 'blog',
+
+              //largeIcon: const DrawableResourceAndroidBitmap('ic_launcher'),
             ),
           ),
         );
@@ -207,6 +235,34 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<Uint8List> _getByteArrayFromUrl(String url) async {
+    final http.Response response = await http.get(Uri.parse(url));
+    return response.bodyBytes;
+  }
+
+  Future<void> _showBigPictureNotificationURL() async {
+    final ByteArrayAndroidBitmap largeIcon = ByteArrayAndroidBitmap(
+        await _getByteArrayFromUrl('https://via.placeholder.com/48x48'));
+    final ByteArrayAndroidBitmap bigPicture = ByteArrayAndroidBitmap(
+        await _getByteArrayFromUrl('https://via.placeholder.com/400x800'));
+
+    final BigPictureStyleInformation bigPictureStyleInformation =
+        BigPictureStyleInformation(bigPicture,
+            largeIcon: largeIcon,
+            contentTitle: 'overridden <b>big</b> content title',
+            htmlFormatContentTitle: true,
+            summaryText: 'summary <i>text</i>',
+            htmlFormatSummaryText: true);
+    final AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('big text channel id', 'big text channel name',
+            channelDescription: 'big text channel description',
+            styleInformation: bigPictureStyleInformation);
+    final NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'big text title', 'silent body', platformChannelSpecifics);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -215,11 +271,15 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: lightTheme,
       darkTheme: darkTheme,
+      navigatorKey: navigatorKey,
       home: userLoggedIn == "User Client"
           ? const UserHome()
           : userLoggedIn == "Staff"
               ? const StaffHome()
               : const Onboarding(),
+      routes: {
+        '/user-mybookinglist': (context) => MyBookingList(),
+      },
     );
   }
 }

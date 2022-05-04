@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sittler_app/Model/book-model.dart';
+import 'package:sittler_app/Pages/User/chat-to-staff.dart';
+import 'package:sittler_app/Route-Navigator/route-navigator.dart';
 
 class MyBookingList extends StatefulWidget {
   const MyBookingList({Key? key}) : super(key: key);
@@ -33,17 +36,17 @@ class _MyBookingListState extends State<MyBookingList> {
             return ListView.builder(
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (context, index) {
-                  final userParent = snapshot.data!.docs[index];
+                  final userStaff = snapshot.data!.docs[index];
                   final DocumentSnapshot bookingData = snapshot.data!.docs[index];
 
                   return Card(
                     elevation: 1,
                     child: ListTile(
                       leading: Image.network(
-                        userParent.get('userStaff.imageUrl'),
+                        userStaff.get('userStaff.imageUrl'),
                       ),
-                      title: Text(userParent.get('userStaff.fullName')),
-                      subtitle: Text(userParent.get('userStaff.email')),
+                      title: Text(userStaff.get('userStaff.fullName')),
+                      subtitle: Text(userStaff.get('userStaff.email')),
                       onTap: () {
                         showModalBottomSheet(
                             backgroundColor: Colors.white,
@@ -89,6 +92,11 @@ class _MyBookingListState extends State<MyBookingList> {
                                           minWidth: MediaQuery.of(context).size.width,
                                           onPressed: () async {
                                             Navigator.of(context).pop();
+                                            RouteNavigator.gotoPage(
+                                                context,
+                                                ChatToStaff(
+                                                    staffInfo: BookModel.fromMap(
+                                                        userStaff.data())));
                                           },
                                           child: const Text(
                                             "Send Message",
