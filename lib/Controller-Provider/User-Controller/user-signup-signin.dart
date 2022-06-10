@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -161,6 +162,41 @@ class SignUpSignInController with ChangeNotifier {
       }
       Fluttertoast.showToast(msg: errorMessage!);
       print(error.code);
+    }
+  }
+
+  editProfile(
+      String? uid, String? imageUrl, UserModel userModel, BuildContext context) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+
+    try {
+      await FirebaseFirestore.instance.collection('table-user-client').doc(uid).update({
+        "fullName": userModel.fullName,
+        "address": userModel.address,
+        "contactNumber": userModel.contactNumber,
+        "imageUrl": imageUrl,
+      }).whenComplete(() async {
+        await FirebaseFirestore.instance
+            .collection("table-book")
+            .where("userModel.uid", isEqualTo: uid)
+            .get()
+            .then((result) {
+          result.docs.forEach((result) {
+            print(result.id);
+            // update also the table book image property
+            FirebaseFirestore.instance.collection('table-book').doc(result.id).update({
+              "userModel.imageUrl": imageUrl,
+            }).whenComplete(() {
+              Fluttertoast.showToast(msg: "Successfully Save Changes");
+            });
+          });
+        });
+
+        print("success!");
+      });
+    } on FirebaseException catch (error) {
+      // print(error);
+      Fluttertoast.showToast(msg: "Something went wrong !!!");
     }
   }
 

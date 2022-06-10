@@ -29,7 +29,7 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   /// On click listner
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
 }
 
 Future<void> main() async {
@@ -104,6 +104,21 @@ class _MyAppState extends State<MyApp> {
     return await Geolocator.getCurrentPosition();
   }
 
+  tapNotificationBar() {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.data.isNotEmpty) {
+        // navigatorKey.currentState
+        //     ?.push(MaterialPageRoute(builder: (_) => const MyBookingList()));
+        navigatorKey.currentState!.pushNamed('/user-mybookinglist');
+        print("Navigate To My Booking List");
+      } else {
+        print("Navigate To Home Page");
+      }
+      print(message.notification!.body);
+      setState(() {});
+    });
+  }
+
   @override
   void initState() {
     tapNotificationBar();
@@ -149,21 +164,6 @@ class _MyAppState extends State<MyApp> {
     } else {
       print('User declined or has not accepted permission');
     }
-  }
-
-  tapNotificationBar() {
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      print("Navigate To Home Page");
-      print(message.notification!.body);
-      if (message.data.isNotEmpty) {
-        // navigatorKey.currentState
-        //     ?.push(MaterialPageRoute(builder: (_) => const MyBookingList()));
-        await navigatorKey.currentState!.pushNamed('/user-mybookinglist');
-        print("Navigate To My Booking List");
-      } else {
-        print("Navigate To Home Page");
-      }
-    });
   }
 
   void listenFCM() async {

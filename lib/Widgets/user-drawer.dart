@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:sittler_app/Controller-Provider/Theme-Controller/theme-controler-provider.dart';
 import 'package:sittler_app/Controller-Provider/User-Controller/user-signup-signin.dart';
+import 'package:sittler_app/Pages/User/User-Client-EditProfile-Page.dart';
 import 'package:sittler_app/Pages/User/my-booking-list.dart';
 
 import 'package:sittler_app/Route-Navigator/route-navigator.dart';
@@ -107,7 +108,9 @@ class _UserDrawerState extends State<UserDrawer> {
                       color: Colors.orange,
                       onPressed: () {},
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      RouteNavigator.gotoPage(context, const UserClientEditProfilePage());
+                    },
                   ),
                   const Divider(
                     color: Colors.grey,

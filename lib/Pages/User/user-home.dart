@@ -30,7 +30,6 @@ class _UserHomeState extends State<UserHome> {
   void initState() {
     super.initState();
     user = FirebaseAuth.instance.currentUser;
-    //context.read<SignUpSignInController>().getUserInfo();
   }
 
   @override
