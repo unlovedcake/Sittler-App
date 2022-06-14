@@ -36,7 +36,10 @@ class _BookAnAppointmentState extends State<BookAnAppointment> {
 
   Future getAllUser() async {
     try {
-      final res = await FirebaseFirestore.instance.collection("table-staff").get();
+      final res = await FirebaseFirestore.instance
+          .collection("table-staff")
+          .where("active", isEqualTo: true)
+          .get();
 
       res.docs.forEach((doc) {
         listUsers.add(doc.data());

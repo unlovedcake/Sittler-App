@@ -5,6 +5,7 @@ class StaffModel {
   String? address;
   String? contactNumber;
   String? gender;
+  bool? active;
   String? token;
 
   String? imageUrl = "";
@@ -18,6 +19,7 @@ class StaffModel {
       this.address,
       this.contactNumber,
       this.gender,
+      this.active,
       this.token,
       this.imageUrl,
       this.position,
@@ -32,6 +34,7 @@ class StaffModel {
       address: map['address'],
       contactNumber: map['contactNumber'],
       gender: map['gender'],
+      active: map['active'],
       token: map['token'],
       imageUrl: map['imageUrl'],
       position: map['position'],
@@ -48,6 +51,7 @@ class StaffModel {
       'address': address,
       'contactNumber': contactNumber,
       'gender': gender,
+      'active': active,
       'token': token,
       'imageUrl': imageUrl,
       'position': position,

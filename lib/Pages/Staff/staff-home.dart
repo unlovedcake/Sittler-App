@@ -74,18 +74,30 @@ class _StaffHomeState extends State<StaffHome> {
           stream: FirebaseFirestore.instance
               .collection("table-staff")
               .where('email', isEqualTo: user!.email)
+              .where('active', isEqualTo: true)
               .snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot?> snapshot) {
-            final currentUser = snapshot.data?.docs;
-
-            if (snapshot.hasData) {
+            //final currentUser = snapshot.data?.docs;
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: Colors.orange,
+              ));
+            }
+            if (snapshot.hasError) {
+              return const Text('Error');
+            } else if (snapshot.data!.docs.isEmpty) {
+              return const Center(
+                  child: Text(
+                      "The admin will confirm your request in order to activate your account."));
+            } else {
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     addVerticalSpace(10),
                     Text(
-                      'Hi ' + '${currentUser![0]['fullName']}',
+                      'Hi, Welcome to Baby Sittler App ',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     // addVerticalSpace(50),
@@ -95,25 +107,6 @@ class _StaffHomeState extends State<StaffHome> {
                   ],
                 ),
               );
-              //   Container(
-              //   height: 400,
-              //   child: GridView(
-              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //           crossAxisCount: 3, mainAxisSpacing: 16, crossAxisSpacing: 16),
-              //       children: [
-              //         Image.network('https://picsum.photos/250?image=1'),
-              //         Image.network('https://picsum.photos/250?image=2'),
-              //         Image.network('https://picsum.photos/250?image=3'),
-              //         Image.network('https://picsum.photos/250?image=1'),
-              //         Image.network('https://picsum.photos/250?image=2'),
-              //         Image.network('https://picsum.photos/250?image=3'),
-              //       ]),
-              // );
-            } else {
-              return const Center(
-                  child: CircularProgressIndicator(
-                color: Colors.black,
-              ));
             }
           },
         ),

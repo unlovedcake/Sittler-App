@@ -5,11 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sittler_app/Admin/admin-dashboard.dart';
 import 'package:sittler_app/Model/user-model.dart';
 import 'package:sittler_app/Pages/Home-Screen/home.dart';
 import 'package:sittler_app/Pages/Staff/staff-home.dart';
 import 'package:sittler_app/Pages/User/user-home.dart';
 import 'package:sittler_app/Route-Navigator/route-navigator.dart';
+import 'package:sittler_app/Routes/routes.dart';
 import 'package:sittler_app/Widgets/progress-dialog.dart';
 
 class SignUpSignInController with ChangeNotifier {
@@ -125,7 +127,9 @@ class SignUpSignInController with ChangeNotifier {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((uid) async {
         User? usr = FirebaseAuth.instance.currentUser;
-        if (usr!.displayName != "Staff") {
+        if (email == "admin@gmail.com" && password == "admin143") {
+          RouteNavigator.gotoPage(context, const AdminDashboard());
+        } else if (usr!.displayName != "Staff") {
           RouteNavigator.gotoPage(context, const UserHome());
         } else {
           RouteNavigator.gotoPage(context, const StaffHome());
