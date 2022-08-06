@@ -82,7 +82,7 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
                 }),
                 addVerticalSpace(20),
 
-                ElevatedButtonStyle.elevatedButton("Register", onPressed: () {
+                ElevatedButtonStyle.elevatedButton("Register As Parent", onPressed: () {
                   print("OK");
                   //Navigator.pushNamed(context, '/user-service-login-page');
                   NavigateRoute.gotoPage(context, const UserClientRegisterPage());

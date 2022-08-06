@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,6 +56,8 @@ class SignUpSignInController with ChangeNotifier {
             );
           });
 
+      String? token = await FirebaseMessaging.instance.getToken();
+
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
@@ -64,6 +67,7 @@ class SignUpSignInController with ChangeNotifier {
 
       if (user != null) {
         userModel!.uid = user!.uid;
+        userModel.token = token;
         userModel.imageUrl =
             "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png";
 
